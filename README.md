@@ -4,7 +4,7 @@
 
 ./src/setting.example.ts をコピーし setting.ts にリネームしてください。
 
-setting.ts を開き "API_KEY" 及び "ENC_EC_USER_ID" を設定してください。
+setting.ts を開き "API_KEY", "ENC_EC_USER_ID", "SITE_NAME" を設定してください。
 
 モバイルのみで表示されるため chrome 開発者ツールのモバイルモードなどでご確認ください。
 

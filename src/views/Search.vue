@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { XzBizController } from "@/interface";
-import { API_KEY, ENC_EC_USER_ID } from "@/setting";
+import { API_KEY, ENC_EC_USER_ID, SITE_NAME } from "@/setting";
 
 declare const window: any;
 
@@ -26,7 +26,7 @@ export default class Search extends Vue {
     setTimeout(() => {
       const initParams = {
         apiKey: API_KEY,
-        site: "andmall",
+        site: SITE_NAME,
         encEcUserId: ENC_EC_USER_ID,
         gender: "women",
         mountTargetId: ".xzbiz-content-search",
