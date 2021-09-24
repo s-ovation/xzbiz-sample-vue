@@ -21,7 +21,7 @@ script2.src =
   "https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=suggest&version=3.1.0&env=dev&site=andmall&initMode=manual";
 document.body.appendChild(script2);
 
-// 商品詳細提案
+// カート内提案
 const script3 = document.createElement("script");
 script3.src =
   "https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=cart&version=3.1.0&env=dev&site=andmall&initMode=manual";
@@ -43,7 +43,8 @@ script1.onload = script2.onload = script3.onload = script1.onerror = script2.one
 };
 
 /**
- * 強制的にABテストを無効にしてます
+ * 動作確認のため強制的にABテストを無効にしてます
+ * 本番ではこの処理は行わないでください
  */
 window.localStorage.setItem("closke_ab_test_id_key", "100");
 
