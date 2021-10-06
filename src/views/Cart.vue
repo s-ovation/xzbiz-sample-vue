@@ -56,16 +56,14 @@ export default class Cart extends Vue {
       };
 
       // 万が一タグがロードできてない場合はここで終了
-      if (!window.closke || !window.closke.cart) {
+      if (!window.xzbiz || !window.xzbiz.cart) {
         return;
       }
 
-      window.closke.cart
-        .init(initParams)
-        .then((controller: XzBizController) => {
-          this.xzBizController = controller;
-          this.onEnterXzBiz();
-        });
+      window.xzbiz.cart.init(initParams).then((controller: XzBizController) => {
+        this.xzBizController = controller;
+        this.onEnterXzBiz();
+      });
     }, 300);
   }
 

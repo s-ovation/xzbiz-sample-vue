@@ -52,11 +52,11 @@ export default class Search extends Vue {
       };
 
       // 万が一タグがロードできてない場合はここで終了
-      if (!window.closke || !window.closke.search) {
+      if (!window.xzbiz || !window.xzbiz.search) {
         return;
       }
 
-      window.closke.search
+      window.xzbiz.search
         .init(initParams)
         .then((controller: XzBizController) => {
           this.xzBizController = controller;
