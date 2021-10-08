@@ -18,6 +18,7 @@
       <li><router-link to="/search">手持ちから検索</router-link></li>
       <li><router-link to="/suggest">商品詳細提案</router-link></li>
       <li><router-link to="/cart">カート内提案</router-link></li>
+      <li><router-link to="/purchase">購入完了</router-link></li>
     </ul>
   </div>
 </template>

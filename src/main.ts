@@ -12,7 +12,7 @@ Vue.config.productionTip = false;
 
 // 手持ちから検索
 const script1 = document.createElement("script");
-script1.src = `https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=search&version=3.1.0&env=dev&site=${SITE_NAME}&initMode=manual`;
+script1.src = `https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=search&version=3.1.1&env=dev&site=${SITE_NAME}&initMode=manual`;
 document.body.appendChild(script1);
 
 // 商品詳細提案
@@ -25,17 +25,22 @@ const script3 = document.createElement("script");
 script3.src = `https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=cart&version=3.1.0&env=dev&site=${SITE_NAME}&initMode=manual`;
 document.body.appendChild(script3);
 
+// 購入完了
+const script4 = document.createElement("script");
+script4.src = `https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=purchase&version=3.1.0&env=dev&site=${SITE_NAME}&initMode=manual`;
+document.body.appendChild(script4);
+
 // 3つのロードが完了したらvueを初期化
 // 失敗した場合も先の処理に進むように
 let loadTotal = 0;
-script1.onload = script2.onload = script3.onload = script1.onerror = script2.onerror = script3.onerror = function(
+script1.onload = script2.onload = script3.onload = script4.onload = script1.onerror = script2.onerror = script3.onerror = script4.onerror = function(
   event: any
 ) {
   const status = event.type === "error" ? "error" : "success";
   console.log(`script loaded: ${status}:`, (this as HTMLScriptElement).src);
   loadTotal++;
 
-  if (loadTotal == 3) {
+  if (loadTotal == 4) {
     initView();
   }
 };
