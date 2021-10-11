@@ -10,6 +10,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { XzBizController } from "@/interface";
+import { intervalCheck } from "@/utils/util";
 import { API_KEY, ENC_EC_USER_ID, SITE_NAME } from "@/setting";
 
 declare const window: any;
@@ -20,49 +21,56 @@ declare const window: any;
 export default class Search extends Vue {
   xzBizController: XzBizController | null = null;
 
-  created(): void {
-    console.log("search page created!");
+  mounted(): void {
+    intervalCheck(
+      // チェック内容
+      () => {
+        // タグの読み込みこまれてwindowへのxzbizオブジェクトの設定が完了しているかどうか
+        return window.xzbiz && window.xzbiz.search && window.xzbiz.search.init;
+      },
+      // チェックがパスしたらこのメソッドを実行
+      () => {
+        this.initXzBiz();
+      },
+      200, // チェック間隔 (ms)
+      3 // チェック上限回数
+    );
 
-    setTimeout(() => {
-      const initParams = {
-        apiKey: API_KEY,
-        site: SITE_NAME,
-        encEcUserId: ENC_EC_USER_ID,
-        gender: "women",
-        mountTargetId: ".xzbiz-content-search",
-        searchModalTriggerId: "#xzbiz_show_modal_btn",
-        testMode: true,
-        debugMode: true,
-        useHistoryAPI: false,
-        defaultBeforeUnloadHandler: false,
-        eventHandlers: {
-          tagLoaded: (params: any) => {
-            console.log("user event handler: search: tagLoaded", params);
-          },
-          beforeLeave: (params: any) => {
-            console.log("user event handler: search: beforeLeave", params);
-          },
-          noContent: (params: any) => {
-            console.log("user event handler: search: noContent", params);
-          },
-          showContent: (params: any) => {
-            console.log("user event handler: search: showContent", params);
-          },
+    return;
+  }
+
+  initXzBiz(): void {
+    const initParams = {
+      apiKey: API_KEY,
+      site: SITE_NAME,
+      encEcUserId: ENC_EC_USER_ID,
+      gender: "women",
+      mountTargetId: ".xzbiz-content-search",
+      searchModalTriggerId: "#xzbiz_show_modal_btn",
+      testMode: true,
+      debugMode: true,
+      useHistoryAPI: false,
+      defaultBeforeUnloadHandler: false,
+      eventHandlers: {
+        tagLoaded: (params: any) => {
+          console.log("user event handler: search: tagLoaded", params);
         },
-      };
+        beforeLeave: (params: any) => {
+          console.log("user event handler: search: beforeLeave", params);
+        },
+        noContent: (params: any) => {
+          console.log("user event handler: search: noContent", params);
+        },
+        showContent: (params: any) => {
+          console.log("user event handler: search: showContent", params);
+        },
+      },
+    };
 
-      // 万が一タグがロードできてない場合はここで終了
-      if (!window.xzbiz || !window.xzbiz.search) {
-        return;
-      }
-
-      window.xzbiz.search
-        .init(initParams)
-        .then((controller: XzBizController) => {
-          this.xzBizController = controller;
-          this.onEnterXzBiz();
-        });
-    }, 300);
+    window.xzbiz.search.init(initParams).then((controller: XzBizController) => {
+      this.xzBizController = controller;
+      this.onEnterXzBiz();
+    });
   }
 
   // vueライフサイクルイベント

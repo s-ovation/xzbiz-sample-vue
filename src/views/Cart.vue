@@ -11,6 +11,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { XzBizController } from "@/interface";
 import { API_KEY, ENC_EC_USER_ID, SITE_NAME } from "@/setting";
+import { intervalCheck } from "@/utils/util";
 
 declare const window: any;
 
@@ -20,51 +21,60 @@ declare const window: any;
 export default class Cart extends Vue {
   xzBizController: XzBizController | null = null;
 
-  created(): void {
+  mounted(): void {
     console.log("cart page created!");
 
-    setTimeout(() => {
-      const initParams = {
-        apiKey: API_KEY,
-        site: SITE_NAME,
-        encEcUserId: ENC_EC_USER_ID,
-        mountTargetId: ".xzbiz-content-cart",
-        productIdList: ["11500000009360001"],
-        gender: "women",
-        // season: 'summer',
-        // age: 24,
-        // height: 158,
-        webviewMode: false,
-        testMode: true,
-        debugMode: true,
-        useHistoryAPI: false,
-        defaultBeforeLeaveHandler: false,
-        eventHandlers: {
-          tagLoaded: (params: any) => {
-            console.log("user event handler: cart: tagLoaded", params);
-          },
-          beforeLeave: (params: any) => {
-            console.log("user event handler: cart: beforeLeave", params);
-          },
-          noContent: (params: any) => {
-            console.log("user event handler: cart: noContent", params);
-          },
-          showContent: (params: any) => {
-            console.log("user event handler: cart: showContent", params);
-          },
+    intervalCheck(
+      // チェック内容
+      () => {
+        // タグの読み込みこまれてwindowへのxzbizオブジェクトの設定が完了しているかどうか
+        return window.xzbiz && window.xzbiz.cart && window.xzbiz.cart.init;
+      },
+      // チェックがパスしたらこのメソッドを実行
+      () => {
+        this.initXzBiz();
+      },
+      200, // チェック間隔 (ms)
+      3 // チェック上限回数
+    );
+  }
+
+  initXzBiz() {
+    const initParams = {
+      apiKey: API_KEY,
+      site: SITE_NAME,
+      encEcUserId: ENC_EC_USER_ID,
+      mountTargetId: ".xzbiz-content-cart",
+      productIdList: ["11500000009360001"],
+      gender: "women",
+      // season: 'summer',
+      // age: 24,
+      // height: 158,
+      webviewMode: false,
+      testMode: true,
+      debugMode: true,
+      useHistoryAPI: false,
+      defaultBeforeLeaveHandler: false,
+      eventHandlers: {
+        tagLoaded: (params: any) => {
+          console.log("user event handler: cart: tagLoaded", params);
         },
-      };
+        beforeLeave: (params: any) => {
+          console.log("user event handler: cart: beforeLeave", params);
+        },
+        noContent: (params: any) => {
+          console.log("user event handler: cart: noContent", params);
+        },
+        showContent: (params: any) => {
+          console.log("user event handler: cart: showContent", params);
+        },
+      },
+    };
 
-      // 万が一タグがロードできてない場合はここで終了
-      if (!window.xzbiz || !window.xzbiz.cart) {
-        return;
-      }
-
-      window.xzbiz.cart.init(initParams).then((controller: XzBizController) => {
-        this.xzBizController = controller;
-        this.onEnterXzBiz();
-      });
-    }, 300);
+    window.xzbiz.cart.init(initParams).then((controller: XzBizController) => {
+      this.xzBizController = controller;
+      this.onEnterXzBiz();
+    });
   }
 
   // vueライフサイクルイベント

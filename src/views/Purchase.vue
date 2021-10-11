@@ -9,6 +9,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { API_KEY, ENC_EC_USER_ID, SITE_NAME } from "@/setting";
+import { intervalCheck } from "@/utils/util";
 
 declare const window: any;
 
@@ -16,43 +17,50 @@ declare const window: any;
   components: {},
 })
 export default class Purchase extends Vue {
-  created(): void {
-    console.log("suggest page created!");
+  mounted(): void {
+    console.log("purchase page created!");
 
-    setTimeout(() => {
-      const initParams = {
-        debugMode: true,
-        apiKey: API_KEY,
-        site: SITE_NAME,
-        encEcUserId: ENC_EC_USER_ID,
-        orderId: "xxxxxxxxxxxxx",
-        productList: [
-          {
-            productId: "123456789",
-            unitPrice: 9999,
-            taxIncludedPrice: 10999,
-            quantity: 1,
-          },
-          {
-            productId: "987654321",
-            unitPrice: 1111,
-            taxIncludedPrice: 1222,
-            quantity: 2,
-          },
-        ],
-      };
+    intervalCheck(
+      // チェック内容
+      () => {
+        // タグの読み込みこまれてwindowへのxzbizオブジェクトの設定が完了しているかどうか
+        return (
+          window.xzbiz && window.xzbiz.purchase && window.xzbiz.purchase.init
+        );
+      },
+      // チェックがパスしたらこのメソッドを実行
+      () => {
+        this.initXzBiz();
+      },
+      200, // チェック間隔 (ms)
+      3 // チェック上限回数
+    );
+  }
 
-      // 万が一タグがロードできてない場合はここで終了
-      if (
-        !window.xzbiz ||
-        !window.xzbiz.purchase ||
-        !window.xzbiz.purchase.init
-      ) {
-        return;
-      }
+  initXzBiz() {
+    const initParams = {
+      debugMode: true,
+      apiKey: API_KEY,
+      site: SITE_NAME,
+      encEcUserId: ENC_EC_USER_ID,
+      orderId: "xxxxxxxxxxxxx",
+      productList: [
+        {
+          productId: "123456789",
+          unitPrice: 9999,
+          taxIncludedPrice: 10999,
+          quantity: 1,
+        },
+        {
+          productId: "987654321",
+          unitPrice: 1111,
+          taxIncludedPrice: 1222,
+          quantity: 2,
+        },
+      ],
+    };
 
-      window.xzbiz.purchase.init(initParams);
-    }, 300);
+    window.xzbiz.purchase.init(initParams);
   }
 }
 </script>

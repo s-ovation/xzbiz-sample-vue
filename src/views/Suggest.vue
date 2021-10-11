@@ -11,6 +11,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { XzBizController } from "@/interface";
 import { API_KEY, ENC_EC_USER_ID, SITE_NAME } from "@/setting";
+import { intervalCheck } from "@/utils/util";
 
 declare const window: any;
 
@@ -20,48 +21,59 @@ declare const window: any;
 export default class Suggest extends Vue {
   xzBizController: XzBizController | null = null;
 
-  created(): void {
+  mounted(): void {
     console.log("suggest page created!");
 
-    setTimeout(() => {
-      const initParams = {
-        apiKey: API_KEY,
-        site: SITE_NAME,
-        mountTargetId: ".xzbiz-content-suggest",
-        encEcUserId: ENC_EC_USER_ID,
-        modelCd: "1280100000014",
-        useHistoryAPI: false,
-        defaultBeforeUnloadHandler: false,
-        eventHandlers: {
-          tagLoaded: (params: any) => {
-            console.log("user event handler: suggest: tagLoaded", params);
-          },
-          beforeLeave: (params: any) => {
-            console.log("user event handler: suggest: beforeLeave", params);
-          },
-          noContent: (params: any) => {
-            console.log("user event handler: suggest: noContent", params);
-          },
-          showContent: (params: any) => {
-            console.log("user event handler: suggest: showContent", params);
-          },
+    intervalCheck(
+      // チェック内容
+      () => {
+        // タグの読み込みこまれてwindowへのxzbizオブジェクトの設定が完了しているかどうか
+        return (
+          window.xzbiz && window.xzbiz.suggest && window.xzbiz.suggest.init
+        );
+      },
+      // チェックがパスしたらこのメソッドを実行
+      () => {
+        this.initXzBiz();
+      },
+      200, // チェック間隔 (ms)
+      3 // チェック上限回数
+    );
+  }
+
+  initXzBiz(): void {
+    const initParams = {
+      apiKey: API_KEY,
+      site: SITE_NAME,
+      mountTargetId: ".xzbiz-content-suggest",
+      encEcUserId: ENC_EC_USER_ID,
+      modelCd: "1280100000014",
+      useHistoryAPI: false,
+      defaultBeforeUnloadHandler: false,
+      eventHandlers: {
+        tagLoaded: (params: any) => {
+          console.log("user event handler: suggest: tagLoaded", params);
         },
-        testMode: true,
-        debugMode: true,
-      };
+        beforeLeave: (params: any) => {
+          console.log("user event handler: suggest: beforeLeave", params);
+        },
+        noContent: (params: any) => {
+          console.log("user event handler: suggest: noContent", params);
+        },
+        showContent: (params: any) => {
+          console.log("user event handler: suggest: showContent", params);
+        },
+      },
+      testMode: true,
+      debugMode: true,
+    };
 
-      // 万が一タグがロードできてない場合はここで終了
-      if (!window.xzbiz || !window.xzbiz.suggest) {
-        return;
-      }
-
-      window.xzbiz.suggest
-        .init(initParams)
-        .then((controller: XzBizController) => {
-          this.xzBizController = controller;
-          this.onEnterXzBiz();
-        });
-    }, 300);
+    window.xzbiz.suggest
+      .init(initParams)
+      .then((controller: XzBizController) => {
+        this.xzBizController = controller;
+        this.onEnterXzBiz();
+      });
   }
 
   // vueライフサイクルイベント
