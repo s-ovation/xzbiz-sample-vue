@@ -33,7 +33,7 @@ export default class Purchase extends Vue {
         this.initXzBiz();
       },
       200, // チェック間隔 (ms)
-      3 // チェック上限回数
+      5 // チェック上限回数
     );
   }
 

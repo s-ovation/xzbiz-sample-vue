@@ -22,6 +22,8 @@ export default class Search extends Vue {
   xzBizController: XzBizController | null = null;
 
   mounted(): void {
+    console.log("search page created!");
+
     intervalCheck(
       // チェック内容
       () => {
@@ -33,10 +35,8 @@ export default class Search extends Vue {
         this.initXzBiz();
       },
       200, // チェック間隔 (ms)
-      3 // チェック上限回数
+      5 // チェック上限回数
     );
-
-    return;
   }
 
   initXzBiz(): void {
