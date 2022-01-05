@@ -17,7 +17,7 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ "../views/Search.vue"),
   },
   {
-    path: "/suggest",
+    path: "/suggest/:id",
     name: "suggest",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Suggest.vue"),

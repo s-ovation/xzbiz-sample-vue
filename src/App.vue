@@ -1,22 +1,25 @@
 <template>
   <div id="app">
-    <h1>xzbiz sample</h1>
+    <h1><router-link to="/">xzbiz sample</router-link></h1>
     <hr />
 
     <!-- 通常 -->
     <!-- <router-view /> -->
 
     <!-- keep-alive使用時 -->
-    <keep-alive>
-      <router-view />
-    </keep-alive>
+    <router-view :key="$route.fullPath" />
+    <!-- <keep-alive>
+      <router-view :key="$route.fullPath" />
+    </keep-alive> -->
 
     <hr />
     <h3>menu</h3>
     <ul class="nav">
       <li><router-link to="/">Home</router-link></li>
+      <li><router-link to="/suggest/1175703442">商品詳細提案A</router-link></li>
+      <li><router-link to="/suggest/1628801548">商品詳細提案B</router-link></li>
+      <li><router-link to="/suggest/1628800291">商品詳細提案C</router-link></li>
       <li><router-link to="/search">手持ちから検索</router-link></li>
-      <li><router-link to="/suggest">商品詳細提案</router-link></li>
       <li><router-link to="/cart">カート内提案</router-link></li>
       <li><router-link to="/purchase">購入完了</router-link></li>
     </ul>

@@ -45,7 +45,7 @@ export default class Cart extends Vue {
       site: SITE_NAME,
       encEcUserId: ENC_EC_USER_ID,
       mountTargetId: ".xzbiz-content-cart",
-      productIdList: ["11500000009360001"],
+      productIdList: ["0000000001392252"],
       gender: "women",
       // season: 'summer',
       // age: 24,
@@ -73,13 +73,7 @@ export default class Cart extends Vue {
 
     window.xzbiz.cart.init(initParams).then((controller: XzBizController) => {
       this.xzBizController = controller;
-      this.onEnterXzBiz();
     });
-  }
-
-  // vueライフサイクルイベント
-  activated(): void {
-    this.onEnterXzBiz();
   }
 
   // vueライフサイクルイベント
@@ -93,15 +87,6 @@ export default class Cart extends Vue {
   // vueライフサイクルイベント
   beforeDestroy(): void {
     this.onLeaveXzBiz();
-  }
-
-  // xz-biz 開始時
-  // xz-bizのinitialize時, activated のタイミングで実行してください
-  onEnterXzBiz(): void {
-    if (this.xzBizController) {
-      this.xzBizController.onBeforeEnter();
-      console.log("cart: enter");
-    }
   }
 
   // xz-biz 離脱時
