@@ -3,7 +3,14 @@
     <h2>手持ちから検索</h2>
 
     <!-- xz biz 設置用コンテナ -->
-    <div class="xzbiz-content-search"></div>
+    <div class="xzbiz-content-search" style="display: none;"></div>
+
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
   </div>
 </template>
 
@@ -52,30 +59,24 @@ export default class Search extends Vue {
       useHistoryAPI: false,
       defaultBeforeUnloadHandler: false,
       eventHandlers: {
-        tagLoaded: (params: any) => {
-          console.log("user event handler: search: tagLoaded", params);
+        tagLoaded: () => {
+          // console.log("user event handler: search: tagLoaded");
         },
-        beforeLeave: (params: any) => {
-          console.log("user event handler: search: beforeLeave", params);
+        beforeLeave: () => {
+          // console.log("user event handler: search: beforeLeave");
         },
-        noContent: (params: any) => {
-          console.log("user event handler: search: noContent", params);
+        noContent: () => {
+          // console.log("user event handler: search: noContent");
         },
-        showContent: (params: any) => {
-          console.log("user event handler: search: showContent", params);
+        hasContent: () => {
+          // console.log("user event handler: search: hasContent");
         },
       },
     };
 
     window.xzbiz.search.init(initParams).then((controller: XzBizController) => {
       this.xzBizController = controller;
-      this.onEnterXzBiz();
     });
-  }
-
-  // vueライフサイクルイベント
-  activated(): void {
-    this.onEnterXzBiz();
   }
 
   // vueライフサイクルイベント
@@ -89,15 +90,6 @@ export default class Search extends Vue {
   // vueライフサイクルイベント
   beforeDestroy(): void {
     this.onLeaveXzBiz();
-  }
-
-  // xz-biz 開始時
-  // xz-bizのinitialize時, activated のタイミングで実行してください
-  onEnterXzBiz(): void {
-    if (this.xzBizController) {
-      this.xzBizController.onBeforeEnter();
-      console.log("search: enter");
-    }
   }
 
   // xz-biz 離脱時

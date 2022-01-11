@@ -23,7 +23,7 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ "../views/Suggest.vue"),
   },
   {
-    path: "/cart",
+    path: "/cart/:id",
     name: "cart",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Cart.vue"),

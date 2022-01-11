@@ -2,15 +2,16 @@
   <div>
     <h2>商品詳細提案</h2>
     <div>modelCd:{{ modelCd }}</div>
-    <!-- prettier-ignore -->
-    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
-    <!-- prettier-ignore -->
-    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
-    <!-- prettier-ignore -->
-    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
 
     <!-- xz biz 設置用コンテナ -->
-    <div class="xzbiz-content-suggest"></div>
+    <div class="xzbiz-content-suggest" style="display: none;"></div>
+
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
   </div>
 </template>
 
@@ -18,6 +19,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { XzBizController } from "@/interface";
 import { API_KEY, ENC_EC_USER_ID, SITE_NAME } from "@/setting";
+import { intervalCheck } from "@/utils/util";
 
 declare const window: any;
 
@@ -29,16 +31,21 @@ export default class Suggest extends Vue {
   modelCd = "";
 
   mounted(): void {
-    console.log("suggest page created!");
-    const tag = document.createElement("script");
-    tag.src =
-      "https://dev-biz.xz-closet.jp/assets/tag-sample-site/tag-loader/xzbiz-script-loader.js?type=suggest&version=3.1.5&env=dev&initMode=manual";
-    document.body.appendChild(tag);
-
-    tag.onload = () => {
-      document.body.removeChild(tag);
-      this.initXzBiz();
-    };
+    intervalCheck(
+      // チェック内容
+      () => {
+        // タグの読み込みこまれてwindowへのxzbizオブジェクトの設定が完了しているかどうか
+        return (
+          window.xzbiz && window.xzbiz.suggest && window.xzbiz.suggest.init
+        );
+      },
+      // チェックがパスしたらこのメソッドを実行
+      () => {
+        this.initXzBiz();
+      },
+      200, // チェック間隔 (ms)
+      5 // チェック上限回数
+    );
   }
 
   initXzBiz(): void {
@@ -53,20 +60,20 @@ export default class Suggest extends Vue {
       modelCd,
       useHistoryAPI: false,
       defaultBeforeUnloadHandler: false,
-      // eventHandlers: {
-      //   tagLoaded: (params: any) => {
-      //     console.log("user event handler: suggest: tagLoaded", params);
-      //   },
-      //   beforeLeave: (params: any) => {
-      //     console.log("user event handler: suggest: beforeLeave", params);
-      //   },
-      //   noContent: (params: any) => {
-      //     console.log("user event handler: suggest: noContent", params);
-      //   },
-      //   showContent: (params: any) => {
-      //     console.log("user event handler: suggest: showContent", params);
-      //   },
-      // },
+      eventHandlers: {
+        tagLoaded: () => {
+          // console.log("user event handler: suggest: tagLoaded");
+        },
+        beforeLeave: () => {
+          // console.log("user event handler: suggest: beforeLeave");
+        },
+        noContent: () => {
+          // console.log("user event handler: suggest: noContent");
+        },
+        hasContent: () => {
+          // console.log("user event handler: suggest: hasContent");
+        },
+      },
       testMode: true,
       debugMode: true,
     };

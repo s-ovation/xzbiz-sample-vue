@@ -1,9 +1,17 @@
 <template>
   <div>
     <h2>カート内提案</h2>
+    <div>productId: {{ pId }}</div>
 
     <!-- xz biz 設置用コンテナ -->
-    <div class="xzbiz-content-cart"></div>
+    <div class="xzbiz-content-cart" style="display: none;"></div>
+
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
+    <!-- prettier-ignore -->
+    <p>コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br />コンテンツ<br /></p>
   </div>
 </template>
 
@@ -20,6 +28,7 @@ declare const window: any;
 })
 export default class Cart extends Vue {
   xzBizController: XzBizController | null = null;
+  pId = "";
 
   mounted(): void {
     console.log("cart page created!");
@@ -39,13 +48,16 @@ export default class Cart extends Vue {
     );
   }
 
-  initXzBiz() {
+  initXzBiz(): void {
+    const pId = this.$route.params.id;
+    this.pId = pId;
+
     const initParams = {
       apiKey: API_KEY,
       site: SITE_NAME,
       encEcUserId: ENC_EC_USER_ID,
       mountTargetId: ".xzbiz-content-cart",
-      productIdList: ["0000000001392252"],
+      productIdList: [pId],
       gender: "women",
       // season: 'summer',
       // age: 24,
@@ -56,17 +68,17 @@ export default class Cart extends Vue {
       useHistoryAPI: false,
       defaultBeforeLeaveHandler: false,
       eventHandlers: {
-        tagLoaded: (params: any) => {
-          console.log("user event handler: cart: tagLoaded", params);
+        tagLoaded: () => {
+          // console.log("user event handler: cart: tagLoaded");
         },
-        beforeLeave: (params: any) => {
-          console.log("user event handler: cart: beforeLeave", params);
+        beforeLeave: () => {
+          // console.log("user event handler: cart: beforeLeave");
         },
-        noContent: (params: any) => {
-          console.log("user event handler: cart: noContent", params);
+        noContent: () => {
+          // console.log("user event handler: cart: noContent");
         },
-        showContent: (params: any) => {
-          console.log("user event handler: cart: showContent", params);
+        hasContent: () => {
+          // console.log("user event handler: cart: hasContent");
         },
       },
     };

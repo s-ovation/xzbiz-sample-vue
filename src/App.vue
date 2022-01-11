@@ -6,8 +6,10 @@
     <!-- 通常 -->
     <!-- <router-view /> -->
 
-    <!-- keep-alive使用時 -->
+    <!-- ページ遷移するたびにページが生成される場合 -->
     <router-view :key="$route.fullPath" />
+
+    <!-- 一度訪れたページはキャッシュされる場合 -->
     <!-- <keep-alive>
       <router-view :key="$route.fullPath" />
     </keep-alive> -->
@@ -20,7 +22,12 @@
       <li><router-link to="/suggest/1628801548">商品詳細提案B</router-link></li>
       <li><router-link to="/suggest/1628800291">商品詳細提案C</router-link></li>
       <li><router-link to="/search">手持ちから検索</router-link></li>
-      <li><router-link to="/cart">カート内提案</router-link></li>
+      <li>
+        <router-link to="/cart/0000000001392252">カート内提案A</router-link>
+      </li>
+      <li>
+        <router-link to="/cart/0000000000868741">カート内提案B</router-link>
+      </li>
       <li><router-link to="/purchase">購入完了</router-link></li>
     </ul>
   </div>

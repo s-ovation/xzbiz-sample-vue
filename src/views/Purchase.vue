@@ -37,7 +37,7 @@ export default class Purchase extends Vue {
     );
   }
 
-  initXzBiz() {
+  initXzBiz(): void {
     const initParams = {
       debugMode: true,
       apiKey: API_KEY,
