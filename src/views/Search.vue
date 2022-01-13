@@ -86,8 +86,6 @@ export default class Search extends Vue {
   }
 
   // vueライフサイクルイベント
-
-  // vueライフサイクルイベント
   beforeDestroy(): void {
     this.onLeaveXzBiz();
   }
