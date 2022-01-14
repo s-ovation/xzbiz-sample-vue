@@ -18,9 +18,13 @@
     <h3>menu</h3>
     <ul class="nav">
       <li><router-link to="/">Home</router-link></li>
+
+      <!-- 以下は仮の品番になります。このサンプルを実行する際は品番を適宜変える必要があります -->
       <li><router-link to="/suggest/1175703442">商品詳細提案A</router-link></li>
       <li><router-link to="/suggest/1628801548">商品詳細提案B</router-link></li>
       <li><router-link to="/suggest/1628800291">商品詳細提案C</router-link></li>
+
+      <!-- 以下は仮の品番になります。このサンプルを実行する際は品番を適宜変える必要があります -->
       <li><router-link to="/search">手持ちから検索</router-link></li>
       <li>
         <router-link to="/cart/0000000001392252">カート内提案A</router-link>
